@@ -12,7 +12,7 @@ class EvenFibonacci {
     def secondnumber = 1
     def placeholder = firstnumber
     while( secondnumber < a ) {
-      if( secondnumber.mod( 2 ) == 0 {
+      if( secondnumber.mod( 2 ) == 0 ) {
       total += secondnumber
       }
       placeholder = secondnumber
