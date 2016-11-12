@@ -1,4 +1,4 @@
-func EvenFibonacci(input: Int) -> Int {
+func evenFibonacci(input: Int) -> Int {
   var total = 0
   var firstnumber = 1
   var secondnumber = 1
@@ -14,4 +14,4 @@ func EvenFibonacci(input: Int) -> Int {
   return total
 }
 
-print(EvenFibonacci(input: 4000000))
+print(evenFibonacci(input: 4000000))
