@@ -1,22 +1,15 @@
-import java.io.*;
-public class Main {
-  public static void main( String[] args ) {
-    println new Multiples35().function( 1000 )
+func function(input: Int ) -> Int {
+  var total = 0
+  var test = 1
+  while(test < input ) {
+    if( test % 5 == 0 ) {
+      total += test
+    } else if( test % 3 == 0 ) {
+      total += test
+    }
+    test += 1
   }
+  return total
 }
 
-class Multiples35 {
-  def function( int a ) {
-    def total = 0
-    def test = 1
-    while(test < a ) {
-      if( test.mod(5) == 0 ) {
-        total += test
-      } else if( test.mod( 3 ) == 0 ) {
-        total += test
-      }
-      test++
-    }
-    return total
-  }
-}
+print(function(input: 1000 ))
