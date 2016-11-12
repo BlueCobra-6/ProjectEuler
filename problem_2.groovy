@@ -1,24 +1,17 @@
-import java.io.*;
-public class Main {
-  public static void main( String[] ars ) {
-    println new EvenFibonacci().function( 4000000 )
+func EvenFibonacci(input: Int) -> Int {
+  var total = 0
+  var firstnumber = 1
+  var secondnumber = 1
+  var placeholder = firstnumber
+  while( secondnumber < input ) {
+    if( secondnumber % 2 == 0 ) {
+      total += secondnumber
+    }
+    placeholder = secondnumber
+    secondnumber += firstnumber
+    firstnumber = placeholder
   }
+  return total
 }
 
-class EvenFibonacci {
-  def function( int a ) {
-    def total = 0
-    def firstnumber = 1
-    def secondnumber = 1
-    def placeholder = firstnumber
-    while( secondnumber < a ) {
-      if( secondnumber.mod( 2 ) == 0 ) {
-      total += secondnumber
-      }
-      placeholder = secondnumber
-      secondnumber += firstnumber
-      firstnumber = placeholder
-    }
-    return total
-  }
-}
+print(EvenFibonacci(input: 4000000))
