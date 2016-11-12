@@ -1,21 +1,14 @@
-import java.io.*;
-public class Main {
-  public static void main( String[] args ) {
-    println new LargestPrimeFactor().function( 600851475143 )
+func largestPrimeFactor(input: Int ) -> Int {
+  var count = 2
+  var placeholder = input
+  while( placeholder != count ) {
+    if( placeholder % count == 0 ) {
+      placeholder /= count
+    } else {
+      count += 1
+    }
   }
+  return count
 }
 
-class LargestPrimeFactor {
-  def function( long a ) {
-    def count = 2
-    long placeholder = a
-    while( placeholder != count ) {
-      if( placeholder.mod( count ) == 0 ) {
-        placeholder /= count
-      } else {
-        count++
-      }
-    }
-    return count
-  }
-}
+print(largestPrimeFactor(input: 600851475143))
