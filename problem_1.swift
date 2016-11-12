@@ -1,4 +1,4 @@
-func function(input: Int ) -> Int {
+func multiple35(input: Int ) -> Int {
   var total = 0
   var test = 1
   while(test < input ) {
@@ -12,4 +12,4 @@ func function(input: Int ) -> Int {
   return total
 }
 
-print(function(input: 1000 ))
+print(multiple35(input: 1000 ))
