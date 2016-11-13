@@ -1,23 +1,21 @@
-import java.io.*;
-public class Main {
-  public static void main(String[] args) {
-    println function(1000)
-  }
-}
-
-def function( int input ) {
-  int a =1, b = 2, c = input - a - b
+func pythagoreanTriplet(input: Int) -> Int {
+  var a = 1
+  var b = 2
+  var c = input - a - b
   while( a*a + b*b != c*c ) {
-    b++
-    c--
-    if( b >= c ) {
-      a++
+    b += 1
+    c -= 1
+    if b >= c {
+      a += 1
       b = a + 1
       c = input - a - b
     }
-    if( b > c ) {
+    if b > c {
+            print("No Pythagorean Triplet")
       return "No Pythagorean Triplet"
     }
   }
   return a*b*c
 }
+
+print(pythagoreanTriplet(input: 1000))
