@@ -181,3 +181,7 @@ ul.plain { padding-left: 16px; margin: 8px 0; }
   .proposal { border: none; padding: 0; }
   body { background: #fff; }
 }
+
+.btn.armed { background: var(--bad); border-color: var(--bad); color: #fff; }
+.category, .card { min-width: 0; overflow-x: auto; }
+.content { min-width: 0; }

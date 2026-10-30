@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useStore } from '../../state/store';
 import { eventMonth, itemBreakdown, money, uid } from '../../lib/calc';
 import { FlowerImage } from '../../components/FlowerImage';
-import { AvailabilityBadge, MONTHS, Modal, NumberInput } from '../../components/ui';
+import { AvailabilityBadge, ConfirmButton, MONTHS, Modal, NumberInput } from '../../components/ui';
 import type { EventItem, FloristEvent } from '../../types';
 
 export function QuoteBuilder({ event }: { event: FloristEvent }) {
@@ -13,8 +13,7 @@ export function QuoteBuilder({ event }: { event: FloristEvent }) {
   const edit = (fn: (e: FloristEvent) => void) => updateEvent(event.id, fn);
 
   function addCategory() {
-    const name = prompt('Category name', 'New Category');
-    if (name) edit((e) => void e.categories.push({ id: uid('c'), name, items: [] }));
+    edit((e) => void e.categories.push({ id: uid('c'), name: 'New Category', items: [] }));
   }
 
   function addItem(categoryId: string, recipeId: string | null) {
@@ -47,15 +46,13 @@ export function QuoteBuilder({ event }: { event: FloristEvent }) {
                 onChange={(ev) => edit((e) => void (e.categories.find((c) => c.id === cat.id)!.name = ev.target.value))}
               />
               <span className="muted">{money(catTotal)}</span>
-              <button
+              <ConfirmButton
                 className="btn ghost small"
-                onClick={() =>
-                  (cat.items.length === 0 || confirm(`Delete "${cat.name}" and its ${cat.items.length} items?`)) &&
-                  edit((e) => void (e.categories = e.categories.filter((c) => c.id !== cat.id)))
-                }
+                confirmLabel={cat.items.length ? `Delete ${cat.items.length} items?` : 'Delete category?'}
+                onConfirm={() => edit((e) => void (e.categories = e.categories.filter((c) => c.id !== cat.id)))}
               >
                 Delete
-              </button>
+              </ConfirmButton>
             </div>
 
             <table className="table items">

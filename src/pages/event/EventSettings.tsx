@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../state/store';
-import { NumberInput } from '../../components/ui';
+import { ConfirmButton, NumberInput } from '../../components/ui';
 import type { EventStatus, FloristEvent, PricingSettings } from '../../types';
 
 const STATUSES: EventStatus[] = ['inquiry', 'proposal', 'booked', 'completed'];
@@ -83,16 +83,16 @@ export function EventSettings({ event }: { event: FloristEvent }) {
 
       <section className="card form danger-zone">
         <h3>Danger zone</h3>
-        <button
+        <ConfirmButton
           className="btn danger"
-          onClick={() => {
-            if (!confirm(`Delete "${event.name}"? This cannot be undone.`)) return;
+          confirmLabel="Click again to delete permanently"
+          onConfirm={() => {
             update((d) => void (d.events = d.events.filter((e) => e.id !== event.id)));
             navigate('/');
           }}
         >
           Delete event
-        </button>
+        </ConfirmButton>
       </section>
     </div>
   );

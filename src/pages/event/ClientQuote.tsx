@@ -9,11 +9,6 @@ export function ClientQuote({ event }: { event: FloristEvent }) {
 
   return (
     <div className="stack">
-      <div className="no-print row">
-        <button className="btn primary" onClick={() => window.print()}>
-          Print / save as PDF
-        </button>
-      </div>
       <article className="proposal">
         <header>
           <div className="brand">

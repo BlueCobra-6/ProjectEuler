@@ -1,7 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { HashRouter, NavLink, Route, Routes } from 'react-router-dom';
+import { HashRouter, MemoryRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { StoreProvider, useStore } from './state/store';
+import { ConfirmButton } from './components/ui';
 import { EventsPage } from './pages/EventsPage';
 import { EventPage } from './pages/EventPage';
 import { FlowersPage } from './pages/FlowersPage';
@@ -25,12 +26,9 @@ function Shell() {
           <NavLink to="/hard-goods">Hard goods</NavLink>
           <NavLink to="/wholesalers">Wholesalers</NavLink>
         </nav>
-        <button
-          className="btn ghost small reset"
-          onClick={() => confirm('Reset all data back to the demo data?') && reset()}
-        >
+        <ConfirmButton className="btn ghost small reset" confirmLabel="Click again to reset" onConfirm={reset}>
           Reset demo data
-        </button>
+        </ConfirmButton>
       </aside>
       <main className="content">
         <Routes>
@@ -46,12 +44,14 @@ function Shell() {
   );
 }
 
+const Router = import.meta.env.VITE_EMBEDDED ? MemoryRouter : HashRouter;
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <StoreProvider>
-      <HashRouter>
+      <Router>
         <Shell />
-      </HashRouter>
+      </Router>
     </StoreProvider>
   </StrictMode>,
 );
