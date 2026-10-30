@@ -3,6 +3,7 @@ import { useStore } from '../state/store';
 import { chooseOffer, money, stemCost, stemOrder } from '../lib/calc';
 import { FlowerImage } from '../components/FlowerImage';
 import { AvailabilityBadge, MONTHS, Modal, SeasonBar } from '../components/ui';
+import { FlowerEditor, blankFlower } from '../components/FlowerEditor';
 import type { Flower } from '../types';
 
 export function FlowersPage() {
@@ -10,7 +11,9 @@ export function FlowersPage() {
   const [q, setQ] = useState('');
   const [month, setMonth] = useState<number>(new Date().getMonth());
   const [inSeasonOnly, setInSeasonOnly] = useState(false);
-  const [selected, setSelected] = useState<Flower | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [editing, setEditing] = useState<Flower | null>(null);
+  const selected = data.flowers.find((f) => f.id === selectedId) ?? null;
 
   const list = data.flowers.filter((f) => {
     const hay = `${f.name} ${f.variety} ${f.color}`.toLowerCase();
@@ -33,6 +36,9 @@ export function FlowersPage() {
           <h1>Flowers</h1>
           <p className="muted">Costs, wholesalers, bunch sizes and seasonal availability.</p>
         </div>
+        <button className="btn primary" onClick={() => setEditing(blankFlower())}>
+          + New flower
+        </button>
       </header>
       <div className="toolbar">
         <input className="input" placeholder="Search flowers…" value={q} onChange={(e) => setQ(e.target.value)} />
@@ -55,7 +61,7 @@ export function FlowersPage() {
         {list.map((f) => {
           const offer = chooseOffer(f);
           return (
-            <button key={f.id} className="card flower-card" onClick={() => setSelected(f)}>
+            <button key={f.id} className="card flower-card" onClick={() => setSelectedId(f.id)}>
               <FlowerImage flower={f} size={120} />
               <div className="flower-card-body">
                 <div className="row between">
@@ -77,14 +83,24 @@ export function FlowersPage() {
       </div>
 
       {selected && (
-        <Modal title={`${selected.name} — ${selected.variety}`} onClose={() => setSelected(null)}>
+        <Modal title={`${selected.name} — ${selected.variety}`} onClose={() => setSelectedId(null)}>
           <div className="row gap">
             <FlowerImage flower={selected} size={140} />
             <div className="grow">
               <p className="muted">
-                {selected.color} · {selected.shape}
+                {selected.color} · {selected.shape} · breakage buffer{' '}
+                {selected.breakageBuffer !== undefined ? `${selected.breakageBuffer}%` : 'uses event default'}
               </p>
               <SeasonBar seasonality={selected.seasonality} highlight={month} />
+              <button
+                className="btn small mt"
+                onClick={() => {
+                  setEditing(selected);
+                  setSelectedId(null);
+                }}
+              >
+                Edit flower
+              </button>
             </div>
           </div>
           <h4>Wholesaler offers</h4>
@@ -137,6 +153,9 @@ export function FlowersPage() {
             </tbody>
           </table>
         </Modal>
+      )}
+      {editing && (
+        <FlowerEditor initial={editing} onClose={() => setEditing(null)} />
       )}
     </>
   );

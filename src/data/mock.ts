@@ -13,7 +13,7 @@ const wholesalers = [
 
 const flowers: Flower[] = [
   {
-    id: 'f-garden-rose', name: 'Garden Rose', variety: "Juliet (David Austin)", color: 'Apricot', hex: '#f4b183', shape: 'round',
+    id: 'f-garden-rose', breakageBuffer: 12, name: 'Garden Rose', variety: "Juliet (David Austin)", color: 'Apricot', hex: '#f4b183', shape: 'round',
     seasonality: season('AAAPPPAAAAAA'),
     offers: [{ wholesalerId: 'w-bloomfield', stemsPerBunch: 12, pricePerBunch: 54 }, { wholesalerId: 'w-import', stemsPerBunch: 12, pricePerBunch: 46.8 }],
   },
@@ -23,17 +23,17 @@ const flowers: Flower[] = [
     offers: [{ wholesalerId: 'w-import', stemsPerBunch: 25, pricePerBunch: 42.5 }, { wholesalerId: 'w-delta', stemsPerBunch: 25, pricePerBunch: 47.5 }],
   },
   {
-    id: 'f-peony', name: 'Peony', variety: 'Sarah Bernhardt', color: 'Blush', hex: '#f6c1cc', shape: 'round',
+    id: 'f-peony', breakageBuffer: 15, name: 'Peony', variety: 'Sarah Bernhardt', color: 'Blush', hex: '#f6c1cc', shape: 'round',
     seasonality: season('L--APPL----L'),
     offers: [{ wholesalerId: 'w-bloomfield', stemsPerBunch: 10, pricePerBunch: 65 }, { wholesalerId: 'w-farm', stemsPerBunch: 10, pricePerBunch: 58 }],
   },
   {
-    id: 'f-ranunculus', name: 'Ranunculus', variety: 'Cloni Hanoi', color: 'Ivory/Blush', hex: '#f3d9cf', shape: 'round',
+    id: 'f-ranunculus', breakageBuffer: 15, name: 'Ranunculus', variety: 'Cloni Hanoi', color: 'Ivory/Blush', hex: '#f3d9cf', shape: 'round',
     seasonality: season('PPPPAL----LA'),
     offers: [{ wholesalerId: 'w-farm', stemsPerBunch: 10, pricePerBunch: 22 }, { wholesalerId: 'w-bloomfield', stemsPerBunch: 10, pricePerBunch: 26 }],
   },
   {
-    id: 'f-dahlia', name: 'Dahlia', variety: 'Café au Lait', color: 'Champagne', hex: '#ecd2b8', shape: 'round',
+    id: 'f-dahlia', breakageBuffer: 20, name: 'Dahlia', variety: 'Café au Lait', color: 'Champagne', hex: '#ecd2b8', shape: 'round',
     seasonality: season('------APPPL-'),
     offers: [{ wholesalerId: 'w-farm', stemsPerBunch: 5, pricePerBunch: 22.5 }, { wholesalerId: 'w-delta', stemsPerBunch: 5, pricePerBunch: 27.5 }],
   },
@@ -58,22 +58,22 @@ const flowers: Flower[] = [
     offers: [{ wholesalerId: 'w-farm', stemsPerBunch: 10, pricePerBunch: 18 }, { wholesalerId: 'w-delta', stemsPerBunch: 10, pricePerBunch: 21 }],
   },
   {
-    id: 'f-hydrangea', name: 'Hydrangea', variety: 'Premium White', color: 'White', hex: '#e9eef2', shape: 'cluster',
+    id: 'f-hydrangea', breakageBuffer: 12, name: 'Hydrangea', variety: 'Premium White', color: 'White', hex: '#e9eef2', shape: 'cluster',
     seasonality: season('AAAAPPPPPAAA'),
     offers: [{ wholesalerId: 'w-import', stemsPerBunch: 15, pricePerBunch: 52.5 }, { wholesalerId: 'w-bloomfield', stemsPerBunch: 10, pricePerBunch: 41 }],
   },
   {
-    id: 'f-anemone', name: 'Anemone', variety: 'Mistral Panda', color: 'White w/ Black Eye', hex: '#fbfbfb', shape: 'round',
+    id: 'f-anemone', breakageBuffer: 20, name: 'Anemone', variety: 'Mistral Panda', color: 'White w/ Black Eye', hex: '#fbfbfb', shape: 'round',
     seasonality: season('PPPAL-----AP'),
     offers: [{ wholesalerId: 'w-farm', stemsPerBunch: 10, pricePerBunch: 19 }],
   },
   {
-    id: 'f-eucalyptus', name: 'Silver Dollar Eucalyptus', variety: 'Cinerea', color: 'Sage', hex: '#9fb5a5', shape: 'foliage',
+    id: 'f-eucalyptus', breakageBuffer: 0, name: 'Silver Dollar Eucalyptus', variety: 'Cinerea', color: 'Sage', hex: '#9fb5a5', shape: 'foliage',
     seasonality: season('AAAAAAAAAAAA'),
     offers: [{ wholesalerId: 'w-delta', stemsPerBunch: 10, pricePerBunch: 12 }, { wholesalerId: 'w-farm', stemsPerBunch: 10, pricePerBunch: 10 }],
   },
   {
-    id: 'f-italian-ruscus', name: 'Italian Ruscus', variety: 'Danae', color: 'Green', hex: '#5f8a5c', shape: 'foliage',
+    id: 'f-italian-ruscus', breakageBuffer: 0, name: 'Italian Ruscus', variety: 'Danae', color: 'Green', hex: '#5f8a5c', shape: 'foliage',
     seasonality: season('AAAAAAAAAAAA'),
     offers: [{ wholesalerId: 'w-delta', stemsPerBunch: 10, pricePerBunch: 9.5 }],
   },
@@ -83,7 +83,7 @@ const flowers: Flower[] = [
     offers: [{ wholesalerId: 'w-bloomfield', stemsPerBunch: 1, pricePerBunch: 38 }],
   },
   {
-    id: 'f-sweet-pea', name: 'Sweet Pea', variety: 'Spencer Mix', color: 'Lavender', hex: '#c8b4e2', shape: 'spray',
+    id: 'f-sweet-pea', breakageBuffer: 25, name: 'Sweet Pea', variety: 'Spencer Mix', color: 'Lavender', hex: '#c8b4e2', shape: 'spray',
     seasonality: season('-LAPPL------'),
     offers: [{ wholesalerId: 'w-farm', stemsPerBunch: 10, pricePerBunch: 24 }],
   },

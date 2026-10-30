@@ -28,6 +28,8 @@ export interface Flower {
   hex: string; // used to render the placeholder image
   shape: 'round' | 'spike' | 'spray' | 'foliage' | 'cluster';
   imageUrl?: string;
+  /** Extra stems to order for this flower, as a percent. Falls back to the event's default when unset. */
+  breakageBuffer?: number;
   /** Availability by month (index 0 = January). */
   seasonality: Availability[];
   offers: WholesalerOffer[];
@@ -107,7 +109,7 @@ export interface FloristEvent {
   categories: EventCategory[];
   /** Preferred wholesaler per flower for ordering; falls back to cheapest. */
   sourcing: Record<string, string>;
-  /** Extra stems ordered beyond need, as a percent buffer for breakage. */
+  /** Default breakage buffer (percent) for flowers without their own. */
   wastageBuffer: number;
 }
 

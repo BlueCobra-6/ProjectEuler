@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useStore } from '../../state/store';
 import { eventMonth, itemBreakdown, money, uid } from '../../lib/calc';
-import { FlowerImage } from '../../components/FlowerImage';
-import { AvailabilityBadge, ConfirmButton, MONTHS, Modal, NumberInput } from '../../components/ui';
+import { RecipeLines } from '../../components/RecipeLines';
+import { ConfirmButton, MONTHS, Modal, NumberInput } from '../../components/ui';
 import type { EventItem, FloristEvent } from '../../types';
 
 export function QuoteBuilder({ event }: { event: FloristEvent }) {
@@ -219,11 +219,24 @@ function RecipeEditor({
   breakdown: ReturnType<typeof itemBreakdown>;
   onChange: (fn: (i: EventItem) => void) => void;
 }) {
-  const { data, lookup } = useStore();
+  const { update } = useStore();
   const month = eventMonth(event);
   const p = event.pricing;
-  const unusedFlowers = data.flowers.filter((f) => !item.flowers.some((x) => x.flowerId === f.id));
-  const unusedGoods = data.hardGoods.filter((h) => !item.hardGoods.some((x) => x.hardGoodId === h.id));
+  const [saved, setSaved] = useState(false);
+
+  function saveAsTemplate() {
+    update((d) =>
+      void d.recipes.push({
+        id: uid('r'),
+        name: item.name,
+        description: item.notes,
+        flowers: item.flowers.map((f) => ({ ...f })),
+        hardGoods: item.hardGoods.map((h) => ({ ...h })),
+        laborMinutes: item.laborMinutes,
+      }),
+    );
+    setSaved(true);
+  }
 
   return (
     <div className="recipe-editor">
@@ -252,114 +265,13 @@ function RecipeEditor({
           Notes
           <input className="input" value={item.notes} onChange={(e) => onChange((i) => void (i.notes = e.target.value))} />
         </label>
+        <button className="btn small align-end" onClick={saveAsTemplate} disabled={saved}>
+          {saved ? 'Saved to recipe library' : 'Save as recipe template'}
+        </button>
       </div>
 
       <div className="recipe-cols">
-        <div>
-          <h4>Flowers &amp; greenery</h4>
-          <table className="table compact">
-            <tbody>
-              {item.flowers.map((rf, idx) => {
-                const f = lookup.flower(rf.flowerId);
-                if (!f) return null;
-                const avail = f.seasonality[month];
-                return (
-                  <tr key={rf.flowerId}>
-                    <td className="thumb">
-                      <FlowerImage flower={f} size={36} />
-                    </td>
-                    <td>
-                      {f.name}
-                      <div className="muted small">{f.variety}</div>
-                    </td>
-                    <td>{avail !== 'available' && <AvailabilityBadge value={avail} />}</td>
-                    <td className="r">
-                      <NumberInput
-                        className="qty"
-                        value={rf.stems}
-                        aria-label={`${f.name} stems`}
-                        onChange={(n) => onChange((i) => void (i.flowers[idx].stems = n))}
-                      />
-                      <span className="muted small"> stems</span>
-                    </td>
-                    <td>
-                      <button
-                        className="btn ghost small"
-                        aria-label="Remove flower"
-                        onClick={() => onChange((i) => void i.flowers.splice(idx, 1))}
-                      >
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          <select
-            className="input"
-            value=""
-            onChange={(e) => onChange((i) => void i.flowers.push({ flowerId: e.target.value, stems: 1 }))}
-          >
-            <option value="">+ Add flower…</option>
-            {unusedFlowers.map((f) => (
-              <option key={f.id} value={f.id}>
-                {f.name} — {f.variety} ({f.seasonality[month]})
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <h4>Hard goods</h4>
-          <table className="table compact">
-            <tbody>
-              {item.hardGoods.map((rh, idx) => {
-                const h = lookup.hardGood(rh.hardGoodId);
-                if (!h) return null;
-                return (
-                  <tr key={rh.hardGoodId}>
-                    <td>
-                      {h.name}
-                      <div className="muted small">
-                        {money(h.unitCost)} · {h.reusable ? 'rental / reusable' : 'consumed'}
-                      </div>
-                    </td>
-                    <td className="r">
-                      <NumberInput
-                        className="qty"
-                        value={rh.quantity}
-                        aria-label={`${h.name} quantity`}
-                        onChange={(n) => onChange((i) => void (i.hardGoods[idx].quantity = n))}
-                      />
-                    </td>
-                    <td>
-                      <button
-                        className="btn ghost small"
-                        aria-label="Remove hard good"
-                        onClick={() => onChange((i) => void i.hardGoods.splice(idx, 1))}
-                      >
-                        ✕
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-          <select
-            className="input"
-            value=""
-            onChange={(e) => onChange((i) => void i.hardGoods.push({ hardGoodId: e.target.value, quantity: 1 }))}
-          >
-            <option value="">+ Add hard good…</option>
-            {unusedGoods.map((h) => (
-              <option key={h.id} value={h.id}>
-                {h.name} ({money(h.unitCost)})
-              </option>
-            ))}
-          </select>
-        </div>
+        <RecipeLines value={item} month={month} onChange={onChange} />
 
         <div className="price-breakdown">
           <h4>Per-unit pricing</h4>

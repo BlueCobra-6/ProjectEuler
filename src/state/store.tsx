@@ -4,7 +4,7 @@ import { makeLookup, type Lookup } from '../lib/calc';
 import type { AppData, FloristEvent } from '../types';
 
 // Mock persistence layer. Replace load/save with API calls once a data source is chosen.
-const STORAGE_KEY = 'petal-ledger:v1';
+const STORAGE_KEY = 'petal-ledger:v2';
 
 function load(): AppData {
   try {

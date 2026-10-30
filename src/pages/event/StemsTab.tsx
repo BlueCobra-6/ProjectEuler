@@ -5,7 +5,13 @@ import { AvailabilityBadge, NumberInput, Stat } from '../../components/ui';
 import type { FloristEvent } from '../../types';
 
 export function StemsTab({ event }: { event: FloristEvent }) {
-  const { lookup, data, updateEvent } = useStore();
+  const { lookup, data, update, updateEvent } = useStore();
+  // Buffers live on the flower so a picky bloom stays padded on every event; blank = event default.
+  const setFlowerBuffer = (flowerId: string, raw: string) =>
+    update((d) => {
+      const f = d.flowers.find((x) => x.id === flowerId);
+      if (f) f.breakageBuffer = raw === '' ? undefined : Number(raw);
+    });
   const lines = stemOrder(event, lookup);
   const month = eventMonth(event);
   const wholesalerName = (id?: string) => data.wholesalers.find((w) => w.id === id)?.name ?? '—';
@@ -32,11 +38,11 @@ export function StemsTab({ event }: { event: FloristEvent }) {
     <div className="stack">
       <section className="summary">
         <Stat label="Stems used in designs" value={totals.used.toLocaleString()} />
-        <Stat label="Stems ordered" value={totals.ordered.toLocaleString()} sub={`${event.wastageBuffer}% breakage buffer`} />
+        <Stat label="Stems ordered" value={totals.ordered.toLocaleString()} sub="incl. breakage buffers" />
         <Stat label="Leftover stems" value={totals.leftover.toLocaleString()} sub={`${money(totals.waste)} of product`} />
         <Stat label="Wholesale flower cost" value={money(totals.cost)} />
         <label className="stat">
-          <span className="stat-label">Breakage buffer %</span>
+          <span className="stat-label">Default breakage buffer %</span>
           <NumberInput
             value={event.wastageBuffer}
             onChange={(n) => updateEvent(event.id, (e) => void (e.wastageBuffer = n))}
@@ -54,6 +60,7 @@ export function StemsTab({ event }: { event: FloristEvent }) {
               <th>Season</th>
               <th>Source</th>
               <th className="r">Used</th>
+              <th className="r">Buffer</th>
               <th className="r">Bunches</th>
               <th className="r">Ordered</th>
               <th className="r">Leftover</th>
@@ -77,7 +84,7 @@ export function StemsTab({ event }: { event: FloristEvent }) {
                 </td>
                 <td>
                   <select
-                    className="input"
+                    className="input source-select"
                     value={l.offer?.wholesalerId ?? ''}
                     onChange={(e) => updateEvent(event.id, (ev) => void (ev.sourcing[l.flower.id] = e.target.value))}
                   >
@@ -89,6 +96,19 @@ export function StemsTab({ event }: { event: FloristEvent }) {
                   </select>
                 </td>
                 <td className="r">{l.stemsUsed}</td>
+                <td className="r nowrap">
+                  <input
+                    type="number"
+                    className="input num qty"
+                    min={0}
+                    value={l.flower.breakageBuffer ?? ''}
+                    placeholder={`${event.wastageBuffer}`}
+                    title={l.bufferIsCustom ? 'Set on this flower' : 'Using the event default'}
+                    aria-label={`${l.flower.name} breakage buffer %`}
+                    onChange={(e) => setFlowerBuffer(l.flower.id, e.target.value)}
+                  />
+                  <span className="muted small">%</span>
+                </td>
                 <td className="r">{l.bunches}</td>
                 <td className="r">{l.stemsOrdered}</td>
                 <td className={`r ${l.leftover > l.stemsUsed * 0.25 ? 'tone-bad' : ''}`}>{l.leftover}</td>
@@ -97,7 +117,7 @@ export function StemsTab({ event }: { event: FloristEvent }) {
             ))}
             {lines.length === 0 && (
               <tr>
-                <td colSpan={9} className="muted empty">
+                <td colSpan={10} className="muted empty">
                   Add flowers to items to see stem counts.
                 </td>
               </tr>

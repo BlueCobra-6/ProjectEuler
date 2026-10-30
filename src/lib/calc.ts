@@ -130,6 +130,8 @@ export function eventTotals(event: FloristEvent, lookup: Lookup): EventTotals {
 export interface StemOrderLine {
   flower: Flower;
   stemsUsed: number;
+  bufferPct: number;
+  bufferIsCustom: boolean;
   stemsWithBuffer: number;
   offer?: WholesalerOffer;
   bunches: number;
@@ -160,13 +162,17 @@ export function stemOrder(event: FloristEvent, lookup: Lookup): StemOrderLine[] 
     const flower = lookup.flower(flowerId);
     if (!flower) continue;
     const offer = chooseOffer(flower, event.sourcing[flowerId]);
-    const stemsWithBuffer = Math.ceil(u.stems * (1 + event.wastageBuffer / 100));
+    const bufferIsCustom = flower.breakageBuffer !== undefined;
+    const bufferPct = flower.breakageBuffer ?? event.wastageBuffer;
+    const stemsWithBuffer = Math.ceil(u.stems * (1 + bufferPct / 100));
     const bunches = offer ? Math.ceil(stemsWithBuffer / offer.stemsPerBunch) : 0;
     const stemsOrdered = offer ? bunches * offer.stemsPerBunch : 0;
     const leftover = Math.max(0, stemsOrdered - u.stems);
     lines.push({
       flower,
       stemsUsed: u.stems,
+      bufferPct,
+      bufferIsCustom,
       stemsWithBuffer,
       offer,
       bunches,
